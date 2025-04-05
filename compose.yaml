@@ -22,9 +22,23 @@ services:
       context: gradio-image
       dockerfile: Dockerfile 
     ports:
-      - 7861:7860
+      - 7862:7860
     volumes:
       - /work
+
+  gradio-files:
+    build:
+      context: gradio-files
+      dockerfile: Dockerfile
+    ports:
+      - 7861:7861
+    develop:
+      watch:
+      - action: sync
+        path: ./app-gradio.py
+        target: /workspace/app-gradio.py
+    volumes:
+      - /workspace
 
   backend-json:
     build:
@@ -34,3 +48,36 @@ services:
       - 8080:8080
     volumes:
       - /code
+
+  backend-image:
+    build:
+      context: backend-image
+      dockerfile: Dockerfile 
+    ports:
+      - 8081:9001
+    volumes:
+      - /code
+
+  backend-files:
+    build:
+      context: backend-files
+      dockerfile: Dockerfile
+    ports: 
+      - 9000:9000
+    develop:
+      watch:
+      - action: sync
+        path: ./backend-files/app/webservice.py
+        target: /app/webservice.py
+    volumes:
+      - /app
+
+  treinamento-treina:
+    build:
+      context: treinamento-treina
+      dockerfile: Dockerfile
+    ports: 
+      - 7001:7000
+    volumes:
+      - /ml
+    

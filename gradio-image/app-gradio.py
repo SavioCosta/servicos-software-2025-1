@@ -2,7 +2,7 @@ import gradio as gr
 import requests
 
 def envia(imagem):
-    url="http://backend-image:9001/imagens/"
+    url="http://backend-image:8081/imagens/"
     with open(imagem,'rb') as f:
         r = requests.post(url, files={"image_file":f})
     return r.content
