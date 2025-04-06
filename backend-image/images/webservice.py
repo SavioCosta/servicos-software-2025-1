@@ -1,15 +1,13 @@
 import os
 import io
 import subprocess
-from os import path
-import tensorflow as tf
-import keras as keras
-from tensorflow.keras import layers
-from tensorflow.keras import Input
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Conv2D
-from PIL import Image
 import numpy as np
+import requests
+import tensorflow as tf
+from os import path
+from tf.keras import layers
+from tf.keras.models import Model
+from PIL import Image
 from fastapi import FastAPI, File, UploadFile, Query, applications
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse, Response
@@ -17,12 +15,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
-
-inception_net = tf.keras.applications.MobileNetV2()
-import requests
-
-response = requests.get("https://git.io/JJkYN")
-labels = response.text.split("\n")
 
 assets_path = os.getcwd() + "/swagger-ui-assets"
 if path.exists(assets_path + "/swagger-ui.css") and path.exists(assets_path + "/swagger-ui-bundle.js"):
@@ -121,28 +113,32 @@ async def index():
                     },
                     response_class=Response)
 async def build_nose(
+    # Recebe imagem enviada da interface e transforma em tensor numpy
     image_file: UploadFile = File(...)):
     image = Image.open(image_file.file)
     image = image.resize((64, 64))
     inp = np.array(image) / 255
     inp = inp.reshape((-1, 64, 64, 3))
     
-    
+    # Reconstroi o modelo a partir dos pesos
     build_nose_model = build_model()
     build_nose_model.load_weights(os.getcwd() + "/images/model/model.weights.h5")
     
+    # Realiza a predicao -- Faz o "in painting" do nariz
     prediction = build_nose_model.predict(inp).reshape((64, 64, 3))
+    
+    # Adapta o tensor para ser usado por PIL.Image para criar uma imagem
     pixels = (prediction * 255).astype(np.uint8)
     img = Image.fromarray(pixels, 'RGB')
-    img.save(os.getcwd() + "/images/model/sample.png")
+    
+    # Salva os bytes da imagem em uma variavel para responder ao request da API
     image_bytes = io.BytesIO()
     img.save(image_bytes, format='PNG')
     image_bytes.seek(0)
     buffer = image_bytes.read()
 
-
+    # Responde request com os bytes da image e o mime type de PNG
     return Response(
         content = buffer, media_type="image/png"
-        #content = prediction.tolist(), media_type="text/json"
     )
 
