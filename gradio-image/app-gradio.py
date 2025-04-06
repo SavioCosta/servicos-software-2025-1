@@ -4,7 +4,7 @@ from PIL import Image
 import io
 
 def envia(imagem):
-    url="http://localhost:8081/build_nose/"
+    url="http://backend-image:8081/build_nose/"
     with open(imagem,'rb') as f:
         r = requests.post(url, files={"image_file":f}, stream=True)
         pilImage = Image.open(io.BytesIO(r.content))

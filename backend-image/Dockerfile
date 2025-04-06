@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir --upgrade -r /images/requirements.txt
 
 RUN python3 -m pip install tf-nightly
 RUN python3 -m pip install keras
+RUN RUN gdown  "https://drive.google.com/uc?id=1TUfMosoWVrBO9RVsKvMBpLDaO8fX-cYA" -O "backend-image/images/model/model.weights.h5
 
 EXPOSE 8081
 
