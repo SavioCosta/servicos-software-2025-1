@@ -31,5 +31,6 @@ __pycache__/
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+samples/
 LICENSE
 README.md
