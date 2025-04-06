@@ -14,6 +14,6 @@ RUN pip install --no-cache-dir --upgrade -r /images/requirements.txt
 RUN python3 -m pip install tf-nightly
 RUN python3 -m pip install keras
 
-EXPOSE 9001
+EXPOSE 8081
 
-CMD gunicorn --bind 0.0.0.0:9001 --workers 1 --timeout 0 images.webservice:app -k uvicorn.workers.UvicornWorker
+CMD gunicorn --bind 0.0.0.0:8081 --workers 1 --timeout 0 images.webservice:app -k uvicorn.workers.UvicornWorker

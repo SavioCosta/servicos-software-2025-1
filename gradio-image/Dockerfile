@@ -9,6 +9,6 @@ ADD requirements.txt app-gradio.py /work/
 
 RUN pip install -r /work/requirements.txt
 
-EXPOSE 7860
+EXPOSE 8080
 
 CMD ["python","/work/app-gradio.py"]
