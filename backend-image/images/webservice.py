@@ -112,23 +112,6 @@ def build_model():
 async def index():
     return "/docs"
 
-@app.post("/imagens", tags=["Endpoints"])
-async def trata_image(
-    image_file: UploadFile = File(...)):
-    image = Image.open(image_file.file)
-    image = image.resize((224, 224))
-    inp = np.array(image)
-    inp = inp.reshape((-1, 224, 224, 3))
-    inp = tf.keras.applications.mobilenet_v2.preprocess_input(inp)
-    prediction = inception_net.predict(inp).flatten()
-    confidences = {labels[i]: float(prediction[i]) for i in range(1000)}
-    result = image_file.filename
-    json_resposta = jsonable_encoder(confidences)
-
-    return JSONResponse(
-        content = json_resposta
-    )
-
 @app.post("/build_nose",
           tags=["Endpoints"], 
           responses = { 
