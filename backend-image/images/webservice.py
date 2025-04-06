@@ -5,8 +5,8 @@ import numpy as np
 import requests
 import tensorflow as tf
 from os import path
-from tf.keras import layers
-from tf.keras.models import Model
+from tensorflow.keras import layers
+from tensorflow.keras import Model
 from PIL import Image
 from fastapi import FastAPI, File, UploadFile, Query, applications
 from fastapi.openapi.docs import get_swagger_ui_html
