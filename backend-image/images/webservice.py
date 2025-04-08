@@ -122,7 +122,7 @@ async def build_nose(
     
     # Reconstroi o modelo a partir dos pesos
     build_nose_model = build_model()
-    build_nose_model.load_weights(os.getcwd() + "/images/model/model.weights.h5")
+    build_nose_model.load_weights("/images/model/model.weights.h5")
     
     # Realiza a predicao -- Faz o "in painting" do nariz
     prediction = build_nose_model.predict(inp).reshape((64, 64, 3))

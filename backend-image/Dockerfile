@@ -4,7 +4,6 @@ FROM python:3.10
 WORKDIR /images
 
 COPY . .
-COPY /images/model/ /images/model/
 COPY --from=swagger-ui /usr/share/nginx/html/swagger-ui.css swagger-ui-assets/swagger-ui.css
 COPY --from=swagger-ui /usr/share/nginx/html/swagger-ui-bundle.js swagger-ui-assets/swagger-ui-bundle.js
 
@@ -13,7 +12,7 @@ COPY ./requirements.txt /images/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /images/requirements.txt 
 
 RUN python3 -m pip install tf-nightly
-RUN gdown  "https://drive.google.com/uc?id=1TUfMosoWVrBO9RVsKvMBpLDaO8fX-cYA" -O "/images/model/model.weights.h5"
+RUN mkdir -p /images/model && gdown  "https://drive.google.com/uc?id=1TUfMosoWVrBO9RVsKvMBpLDaO8fX-cYA" -O "/images/model/model.weights.h5"
 
 EXPOSE 8081
 
